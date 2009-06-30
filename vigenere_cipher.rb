@@ -1,16 +1,26 @@
 class VigenereCipher
 
   def encrypt(key, plain_text)
-    n = -1
-    plain_text.split(//).map{|letter| encrypt_letter(letter, key, n+=1)}.join
+    transform(key, plain_text, 'encrypt')
   end
-  
-private
-  def encrypt_letter(letter, key, n)
-    charset_offset = "A"[0]
-    key_char = key.split(//)[n]
 
-    (((letter[0]-charset_offset)+(key_char[0]-charset_offset)).modulo(26)+charset_offset).chr
+  def decrypt(key, encrypted_message)
+    transform(key, encrypted_message, 'decrypt')
+  end
+
+private
+  def transform(key, text, method)
+    n = -1
+    text.split(//).map{|letter| transform_letter(letter, key.split(//)[n+=1], method=='encrypt' ? :+ : :- )}.join
+  end
+
+  def transform_letter(letter, key_letter, plus_or_minus)
+    charset_offset = "A"[0]
+    letter_position = letter[0] - charset_offset
+    key_letter_position = key_letter[0]-charset_offset
+
+    letter_shifts_by = letter_position.send(plus_or_minus, key_letter_position)
+    (letter_position.modulo(26)+charset_offset).chr
   end
 
 end
