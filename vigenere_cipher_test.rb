@@ -23,4 +23,14 @@ class VigenereCipherTest < Test::Unit::TestCase
     assert_equal expected_result, encrypted_message
   end
 
+  def test_should_loop_around_the_key_when_it_is_short_than_the_text
+    plain_text = 'ATTACKATDAWN';
+    expected_result = 'JXLSLOSLMEOF';
+
+    machine = VigenereCipher.new;
+    encrypted_string = machine.encrypt('JESS',plain_text);
+
+    assert_equal expected_result, encrypted_string
+  end
+
 end
